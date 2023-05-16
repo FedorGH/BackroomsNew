@@ -11,6 +11,9 @@ public class InputManager : MonoBehaviour
     private bool Trigger;
     [SerializeField] private GameObject Txt;
     [SerializeField] private GameObject TxtMenu;
+    public GameObject Monitor;
+    [Header("Ok")]
+    public GameObject playbutton;
     void Update()
     {
         //MenuAnyButton
@@ -19,12 +22,16 @@ public class InputManager : MonoBehaviour
         {
             AnimatorOfCamera.SetTrigger("CamToMoitor");
             Txt.SetActive(false);
-            TxtMenu.SetActive(true);
+            StartCoroutine(changevideo());
         }
-           
-
-        //End
+         
     }
+    public IEnumerator changevideo()
+    {
+        var VideoPlayer = playbutton.GetComponent<UnityEngine.Video.VideoPlayer>();
+        VideoPlayer.url = "https://youtu.be/N5e4WqWx5Bk";
+        yield return new WaitForSeconds(20f);
+        TxtMenu.SetActive(true);
 
-
+    }
 }

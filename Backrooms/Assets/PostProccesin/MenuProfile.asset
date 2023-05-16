@@ -18,11 +18,11 @@ MonoBehaviour:
     value: 1
   spectralLut:
     overrideState: 1
-    value: {fileID: 2800000, guid: 40f29a88c633790438fe54a9e62afa60, type: 3}
+    value: {fileID: 0}
     defaultState: 1
   intensity:
     overrideState: 1
-    value: 0.428
+    value: 0.548
   fastMode:
     overrideState: 1
     value: 0
@@ -47,7 +47,7 @@ MonoBehaviour:
     value: 2
   aperture:
     overrideState: 1
-    value: 1.83
+    value: 4.7
   focalLength:
     overrideState: 1
     value: 35
@@ -199,7 +199,7 @@ MonoBehaviour:
     value: 1
   intensity:
     overrideState: 1
-    value: -9
+    value: -16
   intensityX:
     overrideState: 1
     value: 1
@@ -264,7 +264,7 @@ MonoBehaviour:
     value: 1
   intensity:
     overrideState: 1
-    value: 1.05
+    value: 1.66
   color:
     overrideState: 1
     value: {r: 0, g: 0, b: 0, a: 1}
