@@ -12,12 +12,12 @@ public class InputManager : MonoBehaviour
     [SerializeField] private GameObject Txt;
     [SerializeField] private GameObject TxtMenu;
     public GameObject Monitor;
+    [SerializeField] private Animator animofsound;
+
     [Header("Ok")]
     public Camera cam;
     [Header("WARNING")]
     public GameObject WARN;
-    public AudioSource SOURCEE;
-    public AudioClip WarnSound;
     public AudioSource GAMEMENUMUSIC;
     public AudioClip MainTheme;
     private void Start()
@@ -40,7 +40,7 @@ public class InputManager : MonoBehaviour
     }
     public IEnumerator changevideo()
     {
-       yield return new WaitForSeconds(23f);
+       yield return new WaitForSeconds(1f);
         TxtMenu.SetActive(true);
 
     }
@@ -53,12 +53,9 @@ public class InputManager : MonoBehaviour
 
     public IEnumerator FadeWARN()
     {
-        SOURCEE.PlayOneShot(WarnSound);
+        animofsound.SetTrigger("Play");
         yield return new WaitForSeconds(6f);
-        SOURCEE.Stop();
         Txt.SetActive(true);
         WARN.SetActive(false);
-        GAMEMENUMUSIC.PlayOneShot(MainTheme);
-
     }
 }
