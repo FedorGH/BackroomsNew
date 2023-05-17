@@ -17,6 +17,7 @@ public class InputManager : MonoBehaviour
     [Header("Ok")]
     public Camera cam;
     [Header("WARNING")]
+    private bool Trigger_2;
     public GameObject WARN;
     public AudioSource GAMEMENUMUSIC;
     public AudioClip MainTheme;
@@ -29,7 +30,7 @@ public class InputManager : MonoBehaviour
     void Update()
     {
         //MenuAnyButton
-        if (Input.anyKeyDown) Trigger = true;
+        if (Input.anyKeyDown && !WARN.activeInHierarchy) Trigger = true;
         if (Trigger == true)
         {
             AnimatorOfCamera.SetTrigger("CamToMoitor");
@@ -53,6 +54,7 @@ public class InputManager : MonoBehaviour
 
     public IEnumerator FadeWARN()
     {
+        WARN.SetActive(true);
         animofsound.SetTrigger("Play");
         yield return new WaitForSeconds(6f);
         Txt.SetActive(true);
