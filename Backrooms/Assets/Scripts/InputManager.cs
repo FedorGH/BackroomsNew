@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-
+using UnityEngine.Video;
 public class InputManager : MonoBehaviour
 {
     //Menu 
@@ -13,7 +13,19 @@ public class InputManager : MonoBehaviour
     [SerializeField] private GameObject TxtMenu;
     public GameObject Monitor;
     [Header("Ok")]
-    public GameObject playbutton;
+    public Camera cam;
+    [Header("WARNING")]
+    public GameObject WARN;
+    public AudioSource SOURCEE;
+    public AudioClip WarnSound;
+    public AudioSource GAMEMENUMUSIC;
+    public AudioClip MainTheme;
+    private void Start()
+    {
+        Txt.SetActive(false);
+        TxtMenu.SetActive(false);
+        StartCoroutine(FadeWARN());
+    }
     void Update()
     {
         //MenuAnyButton
@@ -28,10 +40,25 @@ public class InputManager : MonoBehaviour
     }
     public IEnumerator changevideo()
     {
-        var VideoPlayer = playbutton.GetComponent<UnityEngine.Video.VideoPlayer>();
-        VideoPlayer.url = "https://youtu.be/N5e4WqWx5Bk";
-        yield return new WaitForSeconds(20f);
+       yield return new WaitForSeconds(23f);
         TxtMenu.SetActive(true);
+
+    }
+    
+    public void VIDEO()
+    {
+        var VideoPlayer = cam.GetComponent<UnityEngine.Video.VideoPlayer>();
+        VideoPlayer.Play();
+    }
+
+    public IEnumerator FadeWARN()
+    {
+        SOURCEE.PlayOneShot(WarnSound);
+        yield return new WaitForSeconds(6f);
+        SOURCEE.Stop();
+        Txt.SetActive(true);
+        WARN.SetActive(false);
+        GAMEMENUMUSIC.PlayOneShot(MainTheme);
 
     }
 }
