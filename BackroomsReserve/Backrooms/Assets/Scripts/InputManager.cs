@@ -19,6 +19,7 @@ public class InputManager : MonoBehaviour
     [Header("WARNING")]
     private bool Trigger_2;
     public GameObject WARN;
+    public GameObject Version;
     public AudioSource GAMEMENUMUSIC;
     public AudioClip MainTheme;
     private void Start()
@@ -37,13 +38,14 @@ public class InputManager : MonoBehaviour
             Txt.SetActive(false);
             StartCoroutine(changevideo());
         }
-         
+
+
     }
     public IEnumerator changevideo()
     {
        yield return new WaitForSeconds(1f);
         TxtMenu.SetActive(true);
-
+        Version.SetActive(true);
     }
     
     public void VIDEO()
@@ -60,4 +62,5 @@ public class InputManager : MonoBehaviour
         Txt.SetActive(true);
         WARN.SetActive(false);
     }
+
 }
