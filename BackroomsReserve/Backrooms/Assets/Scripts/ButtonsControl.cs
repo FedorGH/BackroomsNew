@@ -1,17 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class ButtonClick : MonoBehaviour
+public class ButtonsControl : MonoBehaviour
 {
+
     public void QuitGame()
     {
         Application.Quit();
     }
-
     public void StartGame()
     {
-        //здесь настраиваем начало игры
+        SceneManager.LoadScene("Level0");
     }
 
     public void SettingsGame()
