@@ -44,7 +44,7 @@ public class EnemyController : MonoBehaviour
 
     public void Audio()
     {
-        Debug.Log("VIZG");
+        Debug.Log("Work");
         VizgS.PlayOneShot(Vizg);
     }
     public void AudioStop()
@@ -72,14 +72,15 @@ public class EnemyController : MonoBehaviour
                 {
                     if (hit.collider.gameObject == player)
                     {
-                        Debug.Log("CollPlayer");
                         navMeshAgent.SetDestination(player.transform.position);
                         animator.SetTrigger("Run");
+                        isRun = true;
                         navMeshAgent.GetComponent<NavMeshAgent>().speed = 9f;
                         return;
                     }
                     if (hit.collider.gameObject != player)
                     {
+                        isRun = false;
                         navMeshAgent.SetDestination(player.transform.position);
                         animator.SetTrigger("Stop");
                         return;
@@ -100,6 +101,7 @@ public class EnemyController : MonoBehaviour
                 {
                     if (hit.collider.gameObject == player)
                     {
+                        Debug.Log("Collider");
                         navMeshAgent.GetComponent<NavMeshAgent>().speed = 9f;
                         navMeshAgent.SetDestination(player.transform.position);
                         isRun = true;
