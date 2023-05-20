@@ -9,7 +9,7 @@ public class EnemyController : MonoBehaviour
     public float visionRange = 10f;
     public AudioClip Vizg;
     public AudioSource VizgS;
-    public Animator anim;
+    public Animator animator;
     public bool isRun;
     void Start()
     {
@@ -28,6 +28,7 @@ public class EnemyController : MonoBehaviour
     private NavMeshAgent agent;
     void GotoNextPoint()
     {
+        animator.SetTrigger("Stop");
         isRun = false;
         // Returns if no points have been set up
         if (points.Length == 0)
@@ -71,16 +72,16 @@ public class EnemyController : MonoBehaviour
                 {
                     if (hit.collider.gameObject == player)
                     {
-                        
+                        Debug.Log("CollPlayer");
                         navMeshAgent.SetDestination(player.transform.position);
-                        anim.SetTrigger("Run");
+                        animator.SetTrigger("Run");
                         navMeshAgent.GetComponent<NavMeshAgent>().speed = 9f;
                         return;
                     }
                     if (hit.collider.gameObject != player)
                     {
                         navMeshAgent.SetDestination(player.transform.position);
-                        anim.SetTrigger("Stop");
+                        animator.SetTrigger("Stop");
                         return;
                     }
 
@@ -94,7 +95,7 @@ public class EnemyController : MonoBehaviour
             {
                 RaycastHit hit;
                 Vector3 directionToPlayer = player.transform.position - transform.position;
-                anim.SetTrigger("Stop");
+                
                 if (Physics.Raycast(transform.position, directionToPlayer, out hit))
                 {
                     if (hit.collider.gameObject == player)

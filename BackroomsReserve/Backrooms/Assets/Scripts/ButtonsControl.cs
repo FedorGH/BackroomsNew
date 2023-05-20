@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class ButtonsControl : MonoBehaviour
 {
+    [SerializeField] private Animator STARTanim;
+    [SerializeField] private Animator PressedOUT;
 
     public void QuitGame()
     {
@@ -12,11 +14,20 @@ public class ButtonsControl : MonoBehaviour
     }
     public void StartGame()
     {
-        SceneManager.LoadScene("Level0");
+        StartCoroutine(startgames());
+        Debug.Log("Click");
     }
 
     public void SettingsGame()
     {
         //здесь настраиваем открытие настроек
+    }
+
+    private IEnumerator startgames()
+    {
+        PressedOUT.SetTrigger("Fade");
+        STARTanim.SetTrigger("Pressed");
+        yield return new WaitForSeconds(5f);
+        SceneManager.LoadScene("Level0");
     }
 }
