@@ -6,6 +6,7 @@ TagManager:
   tags:
   - battery
   - Flashlight
+  - Battery
   layers:
   - Default
   - TransparentFX

@@ -134,6 +134,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Baterry (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 8610254616171886659, guid: 3611846d45f8b08409e7d326acb6f7a0, type: 3}
+      propertyPath: m_TagString
+      value: Battery
+      objectReference: {fileID: 0}
     - target: {fileID: 8950363681194500857, guid: 3611846d45f8b08409e7d326acb6f7a0, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -479,6 +483,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Baterry (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 8610254616171886659, guid: 3611846d45f8b08409e7d326acb6f7a0, type: 3}
+      propertyPath: m_TagString
+      value: Battery
+      objectReference: {fileID: 0}
     - target: {fileID: 8950363681194500857, guid: 3611846d45f8b08409e7d326acb6f7a0, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -537,6 +545,7 @@ GameObject:
   - component: {fileID: 376635091}
   - component: {fileID: 376635090}
   - component: {fileID: 376635089}
+  - component: {fileID: 376635093}
   m_Layer: 0
   m_Name: Flashlight (1)
   m_TagString: Flashlight
@@ -625,6 +634,23 @@ Transform:
   m_Father: {fileID: 5983006275202613148}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -145.353, y: 87.556, z: -85.70599}
+--- !u!114 &376635093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 376635088}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4906821a7fc889943bc3e5b696192270, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flashlightLight: {fileID: 1464413415}
+  fadeSpeed: 0.1
+  maxIntensity: 2
+  minIntensity: 0
+  maxRaycastDistance: 0
 --- !u!1 &468889274
 GameObject:
   m_ObjectHideFlags: 0
@@ -6431,6 +6457,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Baterry
       objectReference: {fileID: 0}
+    - target: {fileID: 8610254616171886659, guid: 3611846d45f8b08409e7d326acb6f7a0, type: 3}
+      propertyPath: m_TagString
+      value: Battery
+      objectReference: {fileID: 0}
     - target: {fileID: 8950363681194500857, guid: 3611846d45f8b08409e7d326acb6f7a0, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -7032,10 +7062,6 @@ MonoBehaviour:
   maxRaycastDistance: 5
   Flashlight: {fileID: 5274140859082705155}
   FlashlightInHands: {fileID: 376635088}
-  ChargeBUFF: 1
-  ChargeDEBUFF: 0.01
-  Max: 2
-  FlashLightPower: {fileID: 1464413415}
 --- !u!1 &5997593904277173719
 GameObject:
   m_ObjectHideFlags: 0
@@ -8200,16 +8226,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   navMeshAgent: {fileID: 7866580617883019283}
-  player: {fileID: 5983006276527019279}
-  visionRange: 10
-  Vizg: {fileID: 8300000, guid: 2165cd7ab103c0544addbd986d786a56, type: 3}
-  VizgS: {fileID: 1706476631}
-  animator: {fileID: 7866580617883019284}
-  isRun: 0
   points:
   - {fileID: 524795564}
   - {fileID: 1834213542}
   - {fileID: 1973582015}
+  player: {fileID: 5983006276527019279}
+  visionRange: 25
+  Vizg: {fileID: 8300000, guid: 2165cd7ab103c0544addbd986d786a56, type: 3}
+  VizgS: {fileID: 1706476631}
+  animator: {fileID: 7866580617883019284}
 --- !u!195 &7866580617883019283
 NavMeshAgent:
   m_ObjectHideFlags: 0
