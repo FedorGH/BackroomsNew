@@ -17,12 +17,21 @@ public class RayCastManager : MonoBehaviour
 
     [Header("Other")]
     public Light FlashLightPower;
+    private float inten;
+
+    private void Start()
+    {
+        inten = FlashLightPower.intensity;
+    }
     private void Update()
     {
         
-        if (FlashLightPower.intensity < Max) FlashLightPower.intensity = Max;
-        FlashLightPower.intensity =- ChargeDEBUFF;
-
+        if (inten < Max) inten = Max;
+        if (FlashlightInHands.activeInHierarchy)
+        {
+            Debug.Log("KillLight");
+            inten -= ChargeDEBUFF;
+        }
 
         //FlashlightGrab
         if (Input.GetKey(KeyCode.F))
@@ -40,8 +49,10 @@ public class RayCastManager : MonoBehaviour
                     Flashlight.SetActive(false);
                 }
             }
-        }    
-        
+        }
+
+        if (Input.GetMouseButtonDown(0)) FlashLightPower.enabled = !FlashLightPower.enabled;
+
         //Battery
         if (Input.GetKey(KeyCode.F))
         {
@@ -55,7 +66,7 @@ public class RayCastManager : MonoBehaviour
                 if (hig.collider.CompareTag("battery"))
                 {
                     Debug.Log("stay!");
-                    FlashLightPower.intensity += ChargeBUFF;
+                    inten += ChargeBUFF;
                     Destroy(hig.transform.gameObject);
                 }
             }

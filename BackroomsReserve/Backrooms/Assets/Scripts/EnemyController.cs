@@ -44,7 +44,6 @@ public class EnemyController : MonoBehaviour
 
     public void Audio()
     {
-        Debug.Log("Work");
         VizgS.PlayOneShot(Vizg);
     }
     public void AudioStop()
