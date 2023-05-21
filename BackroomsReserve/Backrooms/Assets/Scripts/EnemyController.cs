@@ -10,6 +10,7 @@ public class EnemyController : MonoBehaviour
     public AudioClip Vizg;
     public AudioSource VizgS;
     public Animator animator;
+    public float speedRun;
 
     private int currentWaypointIndex = 0;
     private bool isRun = false;
@@ -58,7 +59,7 @@ public class EnemyController : MonoBehaviour
                     navMeshAgent.SetDestination(player.transform.position);
                     animator.SetTrigger("Run");
                     isRun = true;
-                    navMeshAgent.speed = 9f;
+                    navMeshAgent.speed = speedRun;
                 }
                 else
                 {

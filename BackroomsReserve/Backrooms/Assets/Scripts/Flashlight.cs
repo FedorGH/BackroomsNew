@@ -27,17 +27,13 @@ public class Flashlight : MonoBehaviour
             }
         }
 
-
-
-
-
         if (isBatteryPickedUp)
         {
-            IncreaseIntensity();
+            PlusMinusIntensity(maxIntensity);
         }
         else
         {
-            DecreaseIntensity();
+            PlusMinusIntensity(minIntensity);
         }
 
         if (Input.GetMouseButtonDown(0))
@@ -46,23 +42,10 @@ public class Flashlight : MonoBehaviour
         }
     }
 
-    private void DecreaseIntensity()
+    private void PlusMinusIntensity(float intensity)
     {
         float currentIntensity = flashlightLight.intensity;
-        float newIntensity = Mathf.Lerp(currentIntensity, minIntensity, fadeSpeed * Time.deltaTime);
+        float newIntensity = Mathf.Lerp(currentIntensity, intensity, fadeSpeed * Time.deltaTime);
         flashlightLight.intensity = newIntensity;
     }
-
-    private void IncreaseIntensity()
-    {
-        float currentIntensity = flashlightLight.intensity;
-        float newIntensity = Mathf.Lerp(currentIntensity, maxIntensity, fadeSpeed * Time.deltaTime);
-        flashlightLight.intensity = newIntensity;
-    }
-
-
-
-
-
-
 }

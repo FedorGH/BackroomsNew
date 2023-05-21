@@ -38,8 +38,6 @@ public class InputManager : MonoBehaviour
             Txt.SetActive(false);
             StartCoroutine(changevideo());
         }
-
-
     }
     public IEnumerator changevideo()
     {
