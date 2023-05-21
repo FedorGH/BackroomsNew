@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class ButtonsControl : MonoBehaviour
 {
+    public GameObject Load;
     [SerializeField] private Animator STARTanim;
     [SerializeField] private Animator PressedOUT;
 
@@ -14,6 +15,7 @@ public class ButtonsControl : MonoBehaviour
     }
     public void StartGame()
     {
+        Load.SetActive(true);
         StartCoroutine(startgames());
         Debug.Log("Click");
     }
@@ -25,9 +27,10 @@ public class ButtonsControl : MonoBehaviour
 
     private IEnumerator startgames()
     {
+        STARTanim.SetBool("AnimStart", true);
         PressedOUT.SetTrigger("Fade");
         STARTanim.SetTrigger("Pressed");
         yield return new WaitForSeconds(5f);
-        SceneManager.LoadScene("Level0");
+        SceneManager.LoadScene("TEST SCENE");
     }
 }
