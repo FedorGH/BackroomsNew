@@ -19,6 +19,7 @@ public class MenuManager : MonoBehaviour
 
     private void Start()
     {
+        Load.SetActive(false);
         PressAnyBut.SetActive(false);
         Pressed.SetActive(false);
         StartCoroutine(FadeWARN());

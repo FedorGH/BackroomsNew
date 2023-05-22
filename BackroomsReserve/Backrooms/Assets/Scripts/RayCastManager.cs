@@ -12,6 +12,7 @@ public class RayCastManager : MonoBehaviour
 
     private void Start()
     {
+
     }
 
     private void Update()

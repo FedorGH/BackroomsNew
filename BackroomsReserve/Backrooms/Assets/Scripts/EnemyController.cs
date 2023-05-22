@@ -10,6 +10,7 @@ public class EnemyController : MonoBehaviour
     public AudioClip Vizg;
     public AudioSource VizgS;
     public Animator animator;
+    public float walkSpeed;
     public float speedRun;
 
     private int currentWaypointIndex = 0;
@@ -56,13 +57,14 @@ public class EnemyController : MonoBehaviour
                 Vector3 directionToPlayer = player.transform.position - transform.position;
                 if (Physics.Raycast(transform.position, directionToPlayer, out hit) && hit.collider.gameObject == player)
                 {
+                    navMeshAgent.speed = speedRun;
                     navMeshAgent.SetDestination(player.transform.position);
                     animator.SetTrigger("Run");
                     isRun = true;
-                    navMeshAgent.speed = speedRun;
                 }
                 else
                 {
+                    navMeshAgent.speed = walkSpeed;
                     navMeshAgent.SetDestination(player.transform.position);
                     animator.SetTrigger("Stop");
                 }
