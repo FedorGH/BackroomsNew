@@ -16,6 +16,28 @@ public class EnemyController : MonoBehaviour
     private int currentWaypointIndex = 0;
     private bool isRun = false;
 
+    public float duration = 10f; // Длительность таймера в секундах
+    private float elapsedTime = 0f;
+    private bool isRunning = false;
+
+    void TimerComplete()
+    {
+        isRunning = false;
+        Debug.Log("Таймер завершен!");
+    }
+
+    public void StartTimer()
+    {
+        elapsedTime = 0f;
+        isRunning = true;
+    }
+
+    public void StopTimer()
+    {
+        isRunning = false;
+    }
+
+
     private void Start()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
@@ -37,14 +59,21 @@ public class EnemyController : MonoBehaviour
 
     private void Audio(bool play)
     {
-        if (play)
+        if (play && duration > 0)
             VizgS.PlayOneShot(Vizg);
-        else
+        if (duration < 0) 
             VizgS.Stop();
     }
 
     private void Update()
-    {
+    {     if (isRunning)
+        {
+            elapsedTime += Time.deltaTime;
+            if (elapsedTime >= duration)
+            {
+                TimerComplete();
+            }
+        }
         bool previousRunState = isRun;
         isRun = false;
 
@@ -57,17 +86,29 @@ public class EnemyController : MonoBehaviour
                 Vector3 directionToPlayer = player.transform.position - transform.position;
                 if (Physics.Raycast(transform.position, directionToPlayer, out hit) && hit.collider.gameObject == player)
                 {
+                    if(duration > 0)
+                    {
+                    duration -= 1f;
                     navMeshAgent.speed = speedRun;
                     navMeshAgent.SetDestination(player.transform.position);
                     animator.SetTrigger("Run");
+                    }
+
                     isRun = true;
+                    duration += 1f;
                 }
+                
                 else
                 {
-                    navMeshAgent.speed = walkSpeed;
-                    navMeshAgent.SetDestination(player.transform.position);
-                    animator.SetTrigger("Stop");
+                    duration -= 0.001f;
                 }
+            }
+
+            if(duration < -1)
+            {
+                navMeshAgent.speed = walkSpeed;
+                GotoNextPoint();
+                animator.SetTrigger("Stop");
             }
         }
 

@@ -2999,7 +2999,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh94722
+  m_Name: pb_Mesh41284
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -12772,12 +12772,13 @@ MonoBehaviour:
   - {fileID: 1834213542}
   - {fileID: 1973582015}
   player: {fileID: 5983006276527019279}
-  visionRange: 10
+  visionRange: 16
   Vizg: {fileID: 8300000, guid: 2165cd7ab103c0544addbd986d786a56, type: 3}
   VizgS: {fileID: 1706476631}
   animator: {fileID: 7866580617883019284}
   walkSpeed: 3
   speedRun: 5
+  duration: 0
 --- !u!195 &7866580617883019283
 NavMeshAgent:
   m_ObjectHideFlags: 0
