@@ -9,7 +9,7 @@ public class CrosshairCont : MonoBehaviour
 
     private Rect crosshairPosition;
 
-    private void Start()
+    private void Update()
     {
         // Устанавливаем позицию прицела в центр экрана
         float crosshairX = (Screen.width - crosshairSize.x) / 2;
