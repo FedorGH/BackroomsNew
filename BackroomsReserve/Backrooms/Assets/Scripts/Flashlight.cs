@@ -5,7 +5,7 @@ using UnityEngine;
 public class Flashlight : MonoBehaviour
 {
     public Light flashlightLight;
-    public float fadeSpeed = 1f;
+    public float fadeSpeed = 0.5f;
     public float maxIntensity = 1f;
     public float minIntensity = 0f;
     private bool isBatteryPickedUp = false;
@@ -26,14 +26,15 @@ public class Flashlight : MonoBehaviour
                 }
             }
         }
-
+        Mathf.Clamp(flashlightLight.intensity, 0, 2);
         if (isBatteryPickedUp)
         {
-            PlusMinusIntensity(maxIntensity);
+            PlusMinusIntensity();
+            isBatteryPickedUp = false;
         }
         else
         {
-            PlusMinusIntensity(minIntensity);
+            MinusIntensity();
         }
 
         if (Input.GetMouseButtonDown(0))
@@ -42,10 +43,16 @@ public class Flashlight : MonoBehaviour
         }
     }
 
-    private void PlusMinusIntensity(float intensity)
+    private void PlusMinusIntensity()
+    {
+        flashlightLight.intensity += maxIntensity;
+    }
+
+
+    private void MinusIntensity()
     {
         float currentIntensity = flashlightLight.intensity;
-        float newIntensity = Mathf.Lerp(currentIntensity, intensity, fadeSpeed * Time.deltaTime);
+        float newIntensity = Mathf.Lerp(currentIntensity, minIntensity, fadeSpeed * Time.deltaTime);
         flashlightLight.intensity = newIntensity;
     }
 }

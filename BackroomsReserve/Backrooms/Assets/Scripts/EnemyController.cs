@@ -60,7 +60,8 @@ public class EnemyController : MonoBehaviour
     private void Audio(bool play)
     {
         if (play && duration > 0)
-            VizgS.PlayOneShot(Vizg);
+            if(!VizgS.isPlaying) VizgS.PlayOneShot(Vizg);
+        VizgS.PlayOneShot(Vizg);
         if (duration < 0) 
             VizgS.Stop();
     }
@@ -97,12 +98,15 @@ public class EnemyController : MonoBehaviour
                     isRun = true;
                     duration += 1f;
                 }
+
                 
                 else
                 {
                     duration -= 0.001f;
                 }
             }
+
+
 
             if(duration < -1)
             {
