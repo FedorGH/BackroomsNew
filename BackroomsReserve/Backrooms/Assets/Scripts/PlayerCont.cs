@@ -17,6 +17,8 @@ public class PlayerCont : MonoBehaviour
     private bool isJumping = false;
     private bool isRunning = false;
 
+    public static bool _trigger;
+
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -77,6 +79,12 @@ public class PlayerCont : MonoBehaviour
         {
             isRunning = false;
         }
+
+        if (isRunning)
+        {
+            _trigger = true; 
+        }
+        else _trigger = false;
     }
 
     

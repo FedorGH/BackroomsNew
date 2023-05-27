@@ -1,6 +1,9 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Video;
+using TMPro;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 
 public class MenuManager : MonoBehaviour
 {
@@ -9,24 +12,46 @@ public class MenuManager : MonoBehaviour
     public GameObject Load;
     public GameObject Warning;
     public GameObject Version;
-    public AudioSource MenuMusic;
-    public AudioClip MainTheme;
+    
     public Animator AnimatorOfCamera;
     public Animator AnimOfSound;
     public Camera cam;
+    public Animator animatorPRESSED;
 
+
+    [Header("MusicManager")]
+    public GameObject MusicManager; 
+    public AudioClip Goodbyetoworld;
     private bool trigger;
-
+    public AudioClip[] MenuMusics;
+    public AudioClip ItsJustBurningMemories;
+    public static AudioSource MenuMusic;  
+    public AudioClip SixFortySeven;
     private void Start()
     {
-        Load.SetActive(false);
+        animatorPRESSED = GetComponent<Animator>(); 
+        AnimatorOfCamera = GetComponent<Animator>();    
+
+
         PressAnyBut.SetActive(false);
         Pressed.SetActive(false);
         StartCoroutine(FadeWARN());
     }
-
+    
     private void Update()
     {
+
+        if (MusicManager.activeInHierarchy && Input.GetKeyDown(KeyCode.Escape))
+        {
+            AnimatorOfCamera.SetTrigger("CamToMoitor");
+            PressAnyBut.SetActive(false);
+            StartCoroutine(ChangeVideo());
+            MusicManager.SetActive(false);
+        }
+
+        
+
+
         if (Input.anyKeyDown && !Warning.activeInHierarchy)
         {
             trigger = true;
@@ -46,7 +71,20 @@ public class MenuManager : MonoBehaviour
         Pressed.SetActive(true);
         Version.SetActive(true);
         PlayVideo();
+        trigger = false; 
     }
+
+    //MusicChange
+    public static void ChangeSong(AudioClip music)
+    {
+        MenuMusic.PlayOneShot(music);
+    }
+
+    public void HidePressed(GameObject hided)
+    {
+        hided.SetActive(false);
+    }
+
 
     public void PlayVideo()
     {
@@ -62,4 +100,29 @@ public class MenuManager : MonoBehaviour
         PressAnyBut.SetActive(true);
         Warning.SetActive(false);
     }
+
+
+    public void OnChangeButtonMusic()
+    {
+        animatorPRESSED.SetTrigger("FadeOUT");
+        Pressed.SetActive(false);
+        AnimatorOfCamera.SetTrigger("ChangeSong");
+        Debug.Log("MusicChange");
+    }
+
+
+    //OTHER
+    public void SixFortySevenSong()
+    {
+        ChangeSong(SixFortySeven);
+    }
+    public void BurningMemories()
+    {
+        ChangeSong(ItsJustBurningMemories);
+    }
+    public void GodbyeTow()
+    {
+        ChangeSong(Goodbyetoworld);
+    }
+
 }
