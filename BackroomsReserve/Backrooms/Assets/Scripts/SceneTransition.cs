@@ -12,12 +12,11 @@ public class SceneTransition : MonoBehaviour
     
     public Animator componentAnimator;
     private AsyncOperation loadingSceneOperation;
-    public static GameObject Buttons;
 
+    public GameObject Buttons;
 
     public static void SwitchToScene(string sceneName)
     {
-
         instance.componentAnimator.SetTrigger("sceneEnd");
         Debug.Log("HelpMe");
         instance.loadingSceneOperation = SceneManager.LoadSceneAsync(sceneName);

@@ -49,6 +49,9 @@ public class MenuManager : MonoBehaviour
             MusicManager.SetActive(false);
         }
 
+        
+
+
         if (Input.anyKeyDown && !Warning.activeInHierarchy)
         {
             trigger = true;
@@ -81,6 +84,7 @@ public class MenuManager : MonoBehaviour
     {
         hided.SetActive(false);
     }
+
 
     public void PlayVideo()
     {
