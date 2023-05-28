@@ -23,6 +23,7 @@ public class EnemyController : MonoBehaviour
     void TimerComplete()
     {
         isRunning = false;
+        Debug.Log("Таймер завершен!");
     }
 
     public void StartTimer()
