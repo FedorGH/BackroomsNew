@@ -27,6 +27,7 @@ public class PlayerCont : MonoBehaviour
 
     private void Update()
     {
+
         // ¬вод с клавиатуры
         float moveForward = Input.GetAxis("Vertical");
         float moveSideways = Input.GetAxis("Horizontal");
@@ -74,18 +75,12 @@ public class PlayerCont : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             isRunning = true;
+            _trigger = true;
         }
         if (Input.GetKeyUp(KeyCode.LeftShift))
         {
             isRunning = false;
+            _trigger = false;
         }
-
-        if (isRunning)
-        {
-            _trigger = true; 
-        }
-        else _trigger = false;
     }
-
-    
 }
