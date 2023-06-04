@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d640100c164be74e94f8e7edec0cd30, type: 3}
   m_Name: Flashlight
   m_EditorClassIdentifier: 
-  ItemPrefab: {fileID: 4098902588980939866, guid: 895e392f3882da94390ccc4c43c7164d, type: 3}
+  itemPrefab: {fileID: 4098902588980939866, guid: 895e392f3882da94390ccc4c43c7164d, type: 3}
   type: 3
   itemName: Flashlight
   icon: {fileID: 21300000, guid: 86f4b57e95ce1564eb280dd1acb8ec72, type: 3}
-  maxAmount: 0
+  maxAmount: 1
   itemDescription: 

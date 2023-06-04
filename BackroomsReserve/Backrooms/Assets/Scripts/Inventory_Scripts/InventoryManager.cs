@@ -10,6 +10,8 @@ public class InventoryManager : MonoBehaviour
     public bool isOpened;
     public float reachDistance = 4f;
     private Camera mainCamera;
+    public CrosshairCont crosshair;
+    public PlayerCont playerCont;
 
     private void Awake()
     {
@@ -34,15 +36,22 @@ public class InventoryManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.I))
         {
             isOpened = !isOpened;
+            UIPanel.SetActive(isOpened);
+
             if (isOpened)
             {
-                UIPanel.SetActive(true);
+                Cursor.lockState = CursorLockMode.None;
+                crosshair.enabled = false;
+                playerCont.enabled = false;
             }
             else
             {
-                UIPanel.SetActive(false);
+                Cursor.lockState = CursorLockMode.Locked;
+                crosshair.enabled = true;
+                playerCont.enabled = true;
             }
         }
+
         if (Input.GetKey(KeyCode.E))
         {
             Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
@@ -62,18 +71,22 @@ public class InventoryManager : MonoBehaviour
         {
             if (slot.item == _item)
             {
-                slot.amount += _amount;
-                slot.itemAmountText.text = slot.amount.ToString();
-                return;
+                if (slot.amount + _amount <= _item.maxAmount)
+                {
+                    slot.amount += _amount;
+                    slot.itemAmountText.text = slot.amount.ToString();
+                    return;
+                }
             }
+
             if (slot.isEmpty == true)
             {
                 slot.item = _item;
                 slot.amount = _amount;
                 slot.isEmpty = false;
                 slot.SetIcon(_item.icon);
-                slot.itemAmountText.text = _amount.ToString(); 
-                break;
+                slot.itemAmountText.text = _amount.ToString();
+                return;
             }
         }
     }

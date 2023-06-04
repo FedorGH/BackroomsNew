@@ -14,8 +14,8 @@ public class Slot : MonoBehaviour
 
     private void Awake()
     {
-        iconGO = transform.GetChild(0).gameObject;
-        itemAmountText = transform.GetChild(1).GetComponent<TextMeshProUGUI>();
+        iconGO = transform.GetChild(0).GetChild(0).gameObject;
+        itemAmountText = transform.GetChild(0).GetChild(1).GetComponent<TextMeshProUGUI>();
     }
 
     public void SetIcon(Sprite icon)
