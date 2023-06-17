@@ -16,11 +16,15 @@ public class PlayerCont : MonoBehaviour
     private float verticalVelocity = 0f;
     private bool isJumping = false;
     private bool isRunning = false;
+    Animator AnimPlayer;
+
+    public Transform TargetPos;
 
     public static bool _trigger;
 
     private void Start()
     {
+        AnimPlayer = GetComponent<Animator>();
         Cursor.lockState = CursorLockMode.Locked;
         characterController = GetComponent<CharacterController>();
     }
@@ -53,6 +57,7 @@ public class PlayerCont : MonoBehaviour
         {
             if (Input.GetButton("Jump"))
             {
+                AnimPlayer.SetTrigger("jump");
                 isJumping = true;
                 verticalVelocity = jumpForce;
             }
@@ -82,5 +87,9 @@ public class PlayerCont : MonoBehaviour
             isRunning = false;
             _trigger = false;
         }
+
+        Ray desiredTargetRay = playerCamera.GetComponent<Camera>().ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
+        Vector3 desiredTargetPosition = desiredTargetRay.origin + desiredTargetRay.direction * 0.7f;
+        TargetPos.position = desiredTargetPosition;
     }
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 public class AnimPlayer : MonoBehaviour
 {
     Animator animator;
+    private float slowMouseX;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,15 +21,17 @@ public class AnimPlayer : MonoBehaviour
         animator.SetFloat("Walk", z);
         animator.SetFloat("Rotate", x);
 
+        float mouseX = Input.GetAxis("Mouse X");
+        slowMouseX = Mathf.Lerp(slowMouseX, mouseX, 10 * Time.deltaTime);
+        animator.SetFloat("MouseX", slowMouseX);
 
         if (PlayerCont._trigger)
         {
-            animator.SetFloat("Walk", 2f);
+            animator.SetFloat("Walk", 6f);
         }
         else
         {
             return;
         }
-
     }
 }
