@@ -2,13 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ItemType {Default, Food, Weapon, Instrument};
-public class InventoryItem : ScriptableObject
+public class InventoryItem : MonoBehaviour
 {
-    public GameObject itemPrefab;
-    public ItemType type;
     public string itemName;
-    public Sprite icon;
-    public int maxAmount;
+    public int id;
+    public int countItem;
+    public bool isStackable;
+    [Multiline(5)]
     public string itemDescription;
+    public string iconItem;
+    public string prefabItem;
+
 }
