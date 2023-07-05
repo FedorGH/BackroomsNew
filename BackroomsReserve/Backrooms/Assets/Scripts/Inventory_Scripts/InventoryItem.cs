@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class InventoryItem : MonoBehaviour
 {
@@ -10,7 +11,8 @@ public class InventoryItem : MonoBehaviour
     public bool isStackable;
     [Multiline(5)]
     public string itemDescription;
-    public string iconItem;
-    public string prefabItem;
-
+    public Sprite iconItem;
+    public bool forFood;
+    public bool isDropped;
+    public UnityEvent customEvent;
 }

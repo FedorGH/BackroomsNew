@@ -8,6 +8,8 @@ TagManager:
   - Flashlight
   - Battery
   - InventoryManager
+  - MessageManager
+  - QuickAccessManager
   layers:
   - Default
   - TransparentFX

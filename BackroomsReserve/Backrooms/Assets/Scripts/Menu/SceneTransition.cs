@@ -18,9 +18,9 @@ public class SceneTransition : MonoBehaviour
     public static void SwitchToScene(string sceneName)
     {
 
-        instance.componentAnimator.SetTrigger("sceneEnd");
+        instance.componentAnimator.SetTrigger("sceneEnd"); //ошибка загрузки уровня
         Debug.Log("HelpMe");
-        instance.loadingSceneOperation = SceneManager.LoadSceneAsync(sceneName);
+        instance.loadingSceneOperation = SceneManager.LoadSceneAsync(sceneName); //ошибка загрузки уровня
         
         // Чтобы сцена не начала переключаться пока играет анимация closing:
         instance.loadingSceneOperation.allowSceneActivation = false;

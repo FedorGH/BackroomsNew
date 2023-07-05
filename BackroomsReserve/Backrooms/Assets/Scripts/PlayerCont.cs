@@ -14,7 +14,6 @@ public class PlayerCont : MonoBehaviour
     private CharacterController characterController;
     private float verticalRotation = 0f;
     private float verticalVelocity = 0f;
-    private bool isJumping = false;
     private bool isRunning = false;
     Animator AnimPlayer;
 
@@ -31,7 +30,6 @@ public class PlayerCont : MonoBehaviour
 
     private void Update()
     {
-
         // ¬вод с клавиатуры
         float moveForward = Input.GetAxis("Vertical");
         float moveSideways = Input.GetAxis("Horizontal");
@@ -58,12 +56,10 @@ public class PlayerCont : MonoBehaviour
             if (Input.GetButton("Jump"))
             {
                 AnimPlayer.SetTrigger("jump");
-                isJumping = true;
                 verticalVelocity = jumpForce;
             }
             else
             {
-                isJumping = false;
                 verticalVelocity = -0.5f;
             }
         }

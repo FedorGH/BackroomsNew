@@ -29,6 +29,5 @@ public class ButtonsControl : MonoBehaviour
         PressedOUT.SetTrigger("Fade");
         STARTanim.SetBool("AnimStart", true);
         yield return new WaitForSeconds(5f);
-        SceneManager.LoadScene("TEST SCENE");
     }
 }
