@@ -11,6 +11,10 @@ public class PlayerCont : MonoBehaviour
     public float gravityMultiplier = 2f; // ”величение прит€жени€
     public Camera playerCamera;
 
+    //public float crouchSpeed = 2f; // Speed at which the player moves while crouching
+    //public float crouchHeight = 0.5f; // Height of the character controller when crouching
+    //private bool isCrouching = false; // Flag to track if the player is crouching
+
     private CharacterController characterController;
     private float verticalRotation = 0f;
     private float verticalVelocity = 0f;
@@ -30,12 +34,15 @@ public class PlayerCont : MonoBehaviour
 
     private void Update()
     {
-        // ¬вод с клавиатуры
+
         float moveForward = Input.GetAxis("Vertical");
         float moveSideways = Input.GetAxis("Horizontal");
         float movementSpeed = isRunning ? runSpeed : walkSpeed;
         moveForward *= movementSpeed * Time.deltaTime;
         moveSideways *= movementSpeed * Time.deltaTime;
+        
+        // ¬вод с клавиатуры
+
 
         // ¬ращение с помощью мыши
         float mouseHorizontal = Input.GetAxis("Mouse X") * mouseSensitivity;
