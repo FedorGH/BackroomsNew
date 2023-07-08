@@ -1,78 +1,54 @@
+п»їusing System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class CurrentItem : MonoBehaviour, IPointerClickHandler, IDropHandler
 {
-    [HideInInspector] public int index;
+    private int itemNum;
 
-    GameObject inventoryObj;
-    InventoryManager inventory;
-
-    void Start()
+    public InventoryItem CurrentInventoryItem
     {
-        inventoryObj = GameObject.FindGameObjectWithTag("InventoryManager");
-        inventory = inventoryObj.GetComponent<InventoryManager>();
+        get { return InventoryManager.instanceInventory.items[ItemNum]; }
+        set { InventoryManager.instanceInventory.items[ItemNum] = value; }
+    }
+
+    public int ItemNum
+    {
+        get { return itemNum; }
+        set { itemNum = value; }
+    }
+
+    void Update()
+    {
+
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if(eventData.button == PointerEventData.InputButton.Left)
+        if (Drag.isDraggingObject != gameObject)
         {
-            if(inventory.items[index].customEvent != null)
+            if (eventData.button == PointerEventData.InputButton.Left)
             {
-                inventory.items[index].customEvent.Invoke();
-            }
-
-            if (inventory.items[index].forFood)
-            {
-                Remove();
-            }
-        }
-
-        if(eventData.button == PointerEventData.InputButton.Right)
-        {
-            if (inventory.items[index].isDropped)
-            {
-                Drop();
-                Remove();
-            }
-        }
-    }
-    
-    public void Remove()
-    {
-        if (inventory.items[index].id != 0)
-        {
-            if (inventory.items[index].countItem > 1)
-            {
-                inventory.items[index].countItem--;
-            }
-            else
-            {
-                inventory.items[index] = gameObject.AddComponent<InventoryItem>();
-            }
-
-            inventory.DisplayItems();
-        }
-    }
-
-    public void Drop()
-    {
-        if (inventory.items[index].id != 0)
-        {
-            for (int i = 0; i < inventory.dataBase.transform.childCount; i++)
-            {
-                InventoryItem item = inventory.dataBase.transform.GetChild(i).GetComponent<InventoryItem>();
-                if (item) 
+                if (CurrentInventoryItem.customEvent != null)
                 {
-                    if (inventory.items[index].id == item.id)
-                    {
-                        GameObject droppedObj = Instantiate(item.gameObject);
-                        droppedObj.transform.position = Camera.main.transform.position + Camera.main.transform.forward;
-                    }
+                    CurrentInventoryItem.customEvent.Invoke();
+                }
+                if (CurrentInventoryItem.forFood)
+                {
+                    InventoryManager.instanceInventory.RemoveItem(ItemNum);
+                }
+            }
+
+            if (eventData.button == PointerEventData.InputButton.Right)
+            {
+                if (CurrentInventoryItem.isDropped)
+                {
+                    InventoryManager.instanceInventory.DroppedItem(CurrentInventoryItem.id);
+                    InventoryManager.instanceInventory.RemoveItem(ItemNum);
                 }
             }
         }
@@ -80,25 +56,77 @@ public class CurrentItem : MonoBehaviour, IPointerClickHandler, IDropHandler
 
     public void OnDrop(PointerEventData eventData)
     {
-        //int x = 3;
-        //int y = 5;
+        GameObject dragedObject = Drag.isDraggingObject;
 
-        //int z = x;
-        //x = y;
-        //y = z;
-
-        GameObject dragObj = Drag.draggedObj;
-        if(dragObj == null)
+        if (dragedObject == null || dragedObject == gameObject)
         {
-            return;  //если ячейка пустая, то перезапускаем метод
+            return;
         }
-        CurrentItem currentDragItem = dragObj.GetComponent<CurrentItem>();
-        if (currentDragItem)
+
+        CurrentItem dragedCurrentItem = dragedObject.GetComponent<CurrentItem>();
+
+        Drag drag = Drag.isDraggingObject.GetComponent<Drag>();
+
+        if (eventData.button == PointerEventData.InputButton.Left)
         {
-            InventoryItem currentItem = inventory.items[GetComponent<CurrentItem>().index];
-            inventory.items[GetComponent<CurrentItem>().index] = inventory.items[currentDragItem.index];
-            inventory.items[currentDragItem.index] = currentItem;
-            inventory.DisplayItems();
+            if (dragedObject.GetComponent<CurrentItem>())
+            {
+                if (dragedCurrentItem.CurrentInventoryItem.id == GetComponent<CurrentItem>().CurrentInventoryItem.id)
+                {
+                    if (dragedCurrentItem.CurrentInventoryItem.isStackable)
+                    {
+                        int count = dragedCurrentItem.CurrentInventoryItem.countItem;
+                        GetComponent<CurrentItem>().CurrentInventoryItem.countItem += count;
+                        dragedCurrentItem.CurrentInventoryItem = InventoryManager.instanceInventory.EmptySlot();
+                    }
+                }
+                else
+                {
+                    InventoryItem currentItem = GetComponent<CurrentItem>().CurrentInventoryItem;
+                    GetComponent<CurrentItem>().CurrentInventoryItem = dragedCurrentItem.CurrentInventoryItem;
+                    dragedCurrentItem.CurrentInventoryItem = currentItem;
+                }
+
+            }
+
+            InventoryManager.instanceInventory.DisplayItems();
+        }
+
+        if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            if (GetComponent<CurrentItem>().CurrentInventoryItem.id == InventoryManager.instanceInventory.EmptySlotID())
+            {
+                if (dragedCurrentItem)
+                {
+                    InventoryItem dragItem = dragedCurrentItem.CurrentInventoryItem.getCopy();
+                    dragItem.countItem = 1;
+                    GetComponent<CurrentItem>().CurrentInventoryItem = dragItem;
+                    InventoryManager.instanceInventory.RemoveItem(dragedCurrentItem.ItemNum);
+                    return;
+                }
+            }
+
+            if (dragedCurrentItem)
+            {
+                if (GetComponent<CurrentItem>().CurrentInventoryItem.id == dragedCurrentItem.CurrentInventoryItem.id)
+                {
+                    if (dragedCurrentItem.CurrentInventoryItem.isStackable)
+                    {
+                        drag.AddItem(GetComponent<CurrentItem>().CurrentInventoryItem);
+                        InventoryManager.instanceInventory.RemoveItem(dragedCurrentItem.ItemNum);
+                        return;
+                    }
+                }
+            }
         }
     }
+
 }
+
+
+
+
+
+
+
+

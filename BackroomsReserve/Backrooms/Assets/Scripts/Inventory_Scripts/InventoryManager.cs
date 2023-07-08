@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class InventoryManager : MonoBehaviour
 {
+    public static InventoryManager instanceInventory;
+
     [HideInInspector] public List<InventoryItem> items;
+    public GameObject inventoryPanel;
     public GameObject parentCells;
     public GameObject player;
     public GameObject dataBase;
     public GameObject dragPrefab;
-
-    bool a;
 
     [Header("Button assignment")]
     public KeyCode showInventory;
@@ -22,38 +24,48 @@ public class InventoryManager : MonoBehaviour
     public GameObject massageManager; //оповещение о добавлении предмета в инвентарь
     public GameObject massage;
 
-    private void Start()
+    void Awake()
+    {
+        instanceInventory = this;
+    }
+
+    // Use this for initialization
+    void Start()
+    {
+        InitInventory();
+        DisplayItems();
+        NumItems();
+
+        RenameCells();
+        RenameIcons();
+        HidePanel();
+    }
+
+    void InitInventory()
     {
         items = new List<InventoryItem>();
-
-        parentCells.SetActive(false);
-
         for (int i = 0; i < parentCells.transform.childCount; i++)
         {
-            parentCells.transform.GetChild(i).GetComponent<CurrentItem>().index = i;
-        }
-
-        for (int i = 0; i < parentCells.transform.childCount; i++)
-        {
-            items.Add(gameObject.AddComponent<InventoryItem>());
+            items.Add(EmptySlot());
         }
     }
-    private void Update()
-    {
-        InventoryActive();
 
-        if (Input.GetKeyDown(takeObj))
+    public InventoryItem EmptySlot()
+    {
+        return gameObject.AddComponent<InventoryItem>();
+    }
+
+    public void AddUnStackableItem(InventoryItem currentItem)
+    {
+        for (int i = 0; i < items.Count; i++)
         {
-            Ray ray = Camera.main.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, 3f))
+            if (items[i].id == EmptySlotID())
             {
-                if (hit.collider.GetComponent<InventoryItem>())
-                {
-                    InventoryItem currentItem = hit.collider.GetComponent<InventoryItem>();
-                    Massage(currentItem);
-                    AddItem(currentItem);
-                }
+                items[i] = currentItem;
+                items[i].countItem = 1;
+                DisplayItems();
+                //Destroy(currentItem.gameObject);
+                break;
             }
         }
     }
@@ -70,30 +82,9 @@ public class InventoryManager : MonoBehaviour
         iconMsg.sprite = currentItem.iconItem;
     }
 
-    void AddItem(InventoryItem currentItem)
+    public int EmptySlotID()
     {
-        if (currentItem.isStackable)
-        {
-            AddStackableItem(currentItem);
-        }
-        else
-        {
-            AddUnstackableItem(currentItem);
-        }
-    }
-
-    void AddUnstackableItem(InventoryItem currentItem)
-    {
-        for (int i = 0; i < items.Count; i++)
-        {
-            if (items[i].id == 0)
-            {
-                items[i] = currentItem;
-                DisplayItems();
-                Destroy(currentItem.gameObject);
-                break;
-            }
-        }
+        return 0;
     }
 
     void AddStackableItem(InventoryItem currentItem)
@@ -104,20 +95,81 @@ public class InventoryManager : MonoBehaviour
             {
                 items[i].countItem++;
                 DisplayItems();
-                Destroy(currentItem.gameObject);
+                //Destroy(currentItem.gameObject);
                 return;
             }
         }
-        AddUnstackableItem(currentItem);
+        AddUnStackableItem(currentItem);
     }
 
-    void InventoryActive()
+    public void AddItem(InventoryItem currentItem)
+    {
+        if (currentItem.isStackable)
+            AddStackableItem(currentItem);
+        else
+            AddUnStackableItem(currentItem);
+    }
+
+    void NumItems()
+    {
+        for (int i = 0; i < parentCells.transform.childCount; i++)
+        {
+            Transform cell = parentCells.transform.GetChild(i);
+            cell.GetComponent<CurrentItem>().ItemNum = i;
+        }
+    }
+
+    void RenameCells()
+    {
+        for (int i = 0; i < parentCells.transform.childCount; i++)
+        {
+            Transform cell = parentCells.transform.GetChild(i);
+            cell.name = "Cell " + i.ToString();
+        }
+    }
+
+    void RenameIcons()
+    {
+        for (int i = 0; i < parentCells.transform.childCount; i++)
+        {
+            Transform cell = parentCells.transform.GetChild(i);
+            Transform icon = cell.GetChild(0);
+            icon.name = "Icon " + i.ToString();
+        }
+    }
+
+    void Update()
+    {
+        TakeItem();
+        SwitchPanel();
+    }
+
+    void TakeItem()
+    {
+        if (Input.GetKeyDown(takeObj))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, 3f))
+            {
+                if (hit.collider.GetComponent<InventoryItem>())
+                {
+                    InventoryItem currentItem = hit.collider.GetComponent<InventoryItem>();
+                    Massage(currentItem);
+                    AddItem(currentItem);
+                    Destroy(currentItem.gameObject);
+                }
+            }
+        }
+    }
+
+    void SwitchPanel()
     {
         if (Input.GetKeyDown(showInventory))
         {
-            if (parentCells.activeSelf)
+            if (inventoryPanel.activeSelf)
             {
-                parentCells.SetActive(false);
+                inventoryPanel.SetActive(false);
                 dragPrefab.SetActive(false);
                 player.GetComponent<PlayerCont>().enabled = true;
                 player.GetComponent<CrosshairCont>().enabled = true;
@@ -125,7 +177,7 @@ public class InventoryManager : MonoBehaviour
             }
             else
             {
-                parentCells.SetActive(true);
+                inventoryPanel.SetActive(true);
                 player.GetComponent<PlayerCont>().enabled = false;
                 player.GetComponent<CrosshairCont>().enabled = false;
                 Cursor.lockState = CursorLockMode.None;
@@ -133,36 +185,105 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
+    void HidePanel()
+    {
+        inventoryPanel.SetActive(false);
+    }
+
     public void DisplayItems()
     {
-        for (int i = 0; i < items.Count; i++)
+
+        for (int i = 0; i < parentCells.transform.childCount; i++)
         {
+            InventoryItem currentItem = items[i];
             Transform cell = parentCells.transform.GetChild(i);
-            Transform icon = cell.GetChild(0);
-            Transform stacItem = icon.GetChild(0);
 
-            TMP_Text text = stacItem.GetComponent<TMP_Text>();
-            Image img = icon.GetComponent<Image>();
-            
-            if (items[i].id != 0)
+            Image icon = cell.transform.GetChild(0).GetComponent<Image>();
+            TMP_Text count = icon.transform.GetChild(0).GetComponent<TMP_Text>();
+
+            if (currentItem.id != EmptySlotID())
             {
-                img.enabled = true;
-                img.sprite = items[i].iconItem;
+                icon.enabled = true;
+                Sprite itemIcon = currentItem.iconItem;
+                icon.sprite = itemIcon;
+                count.text = null;
 
-                if(items[i].countItem > 1)
+                if (currentItem.isStackable)
                 {
-                    text.text = items[i].countItem.ToString();
-                }
-                else
-                {
-                    text.text = null;
+                    if (currentItem.countItem > 1)
+                    {
+                        count.text = currentItem.countItem.ToString();
+                    }
+                    else
+                    {
+                        count.text = null;
+                    }
                 }
             }
             else
             {
-                img.enabled = false;
-                img.sprite = null;
-                text.text = null;
+                icon.enabled = false;
+                icon.sprite = null;
+                count.text = null;
+            }
+        }
+    }
+
+    public void RemoveItem(int numItem)
+    {
+        if (items[numItem].countItem > 1)
+        {
+            items[numItem].countItem--;
+        }
+        else
+        {
+            items[numItem] = EmptySlot();
+        }
+        DisplayItems();
+    }
+
+    public void DroppedItem(int id)
+    {
+        for (int i = 0; i < dataBase.transform.childCount; i++)
+        {
+            InventoryItem item = dataBase.transform.GetChild(i).GetComponent<InventoryItem>();
+            if (item != null)
+            {
+                if (item.id == id)
+                {
+                    GameObject obj = Instantiate(item.gameObject);
+                    obj.transform.position = Camera.main.transform.position + Camera.main.transform.forward;
+                }
+            }
+        }
+    }
+    public bool IsExistItem(int id)
+    {
+        for (int i = 0; i < items.Count; i++)
+        {
+            if (items[i].id == id)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void RemoveItemID(int id)
+    {
+        for (int i = 0; i < items.Count; i++)
+        {
+            if (items[i].id == id)
+            {
+                if (items[i].countItem > 1)
+                {
+                    items[i].countItem--;
+                }
+                else
+                {
+                    items[i] = EmptySlot();
+                }
+                DisplayItems();
             }
         }
     }

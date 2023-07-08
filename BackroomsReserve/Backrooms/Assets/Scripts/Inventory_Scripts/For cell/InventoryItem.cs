@@ -12,7 +12,13 @@ public class InventoryItem : MonoBehaviour
     [Multiline(5)]
     public string itemDescription;
     public Sprite iconItem;
+
     public bool forFood;
     public bool isDropped;
+
     public UnityEvent customEvent;
+    public InventoryItem getCopy()
+    {
+        return (InventoryItem)this.MemberwiseClone();
+    }
 }

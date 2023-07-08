@@ -25,7 +25,7 @@ public class AnimPlayer : MonoBehaviour
         slowMouseX = Mathf.Lerp(slowMouseX, mouseX, 10 * Time.deltaTime);
         animator.SetFloat("MouseX", slowMouseX);
 
-        if (PlayerCont._trigger)
+        if (GetComponent<PlayerCont>().isRunning == true)
         {
             animator.SetFloat("Walk", 6f);
         }

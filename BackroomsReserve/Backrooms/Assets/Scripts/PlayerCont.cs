@@ -4,32 +4,29 @@ using UnityEngine;
 
 public class PlayerCont : MonoBehaviour
 {
-    public float walkSpeed = 5f;
-    public float runSpeed = 10f;
+    public float walkSpeed = 4f;
+    public float runSpeed = 6f;
+    public float crouchSpeed = 2f;
     public float mouseSensitivity = 2f;
     public float jumpForce = 5f;
     public float gravityMultiplier = 2f; // Увеличение притяжения
+    public float crouchHeight = 1f;
     public Camera playerCamera;
-
-    //public float crouchSpeed = 2f; // Speed at which the player moves while crouching
-    //public float crouchHeight = 0.5f; // Height of the character controller when crouching
-    //private bool isCrouching = false; // Flag to track if the player is crouching
 
     private CharacterController characterController;
     private float verticalRotation = 0f;
     private float verticalVelocity = 0f;
-    private bool isRunning = false;
+    [HideInInspector] public bool isRunning = false;
+    private bool isCrouching = false; // Переменная состояния крадения
+    private float originalControllerHeight;
     Animator AnimPlayer;
-
-    public Transform TargetPos;
-
-    public static bool _trigger;
 
     private void Start()
     {
         AnimPlayer = GetComponent<Animator>();
         Cursor.lockState = CursorLockMode.Locked;
         characterController = GetComponent<CharacterController>();
+        originalControllerHeight = characterController.height;
     }
 
     private void Update()
@@ -37,7 +34,7 @@ public class PlayerCont : MonoBehaviour
 
         float moveForward = Input.GetAxis("Vertical");
         float moveSideways = Input.GetAxis("Horizontal");
-        float movementSpeed = isRunning ? runSpeed : walkSpeed;
+        float movementSpeed = isRunning ? runSpeed : (isCrouching ? crouchSpeed : walkSpeed);
         moveForward *= movementSpeed * Time.deltaTime;
         moveSideways *= movementSpeed * Time.deltaTime;
         
@@ -80,19 +77,32 @@ public class PlayerCont : MonoBehaviour
         characterController.Move(moveDirection);
 
         // Проверяем состояние бега
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        if (Input.GetKeyDown(KeyCode.LeftShift) && isCrouching == false)
         {
             isRunning = true;
-            _trigger = true;
         }
         if (Input.GetKeyUp(KeyCode.LeftShift))
         {
             isRunning = false;
-            _trigger = false;
         }
 
-        Ray desiredTargetRay = playerCamera.GetComponent<Camera>().ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
-        Vector3 desiredTargetPosition = desiredTargetRay.origin + desiredTargetRay.direction * 0.7f;
-        TargetPos.position = desiredTargetPosition;
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            ToggleCrouch();
+        }
+    }
+
+    private void ToggleCrouch()
+    {
+        isCrouching = !isCrouching; // Инвертируем состояние крадения
+
+        if (isCrouching)
+        {
+            characterController.height = crouchHeight; // Изменяем высоту CharacterController в положении крадения
+        }
+        else
+        {
+            characterController.height = originalControllerHeight; // Возвращаем оригинальную высоту CharacterController
+        }
     }
 }
