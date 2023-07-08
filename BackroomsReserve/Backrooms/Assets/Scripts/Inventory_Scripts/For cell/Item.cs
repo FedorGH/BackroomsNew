@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class InventoryItem : MonoBehaviour
+public class Item : MonoBehaviour
 {
     public string itemName;
     public int id;
@@ -17,8 +17,10 @@ public class InventoryItem : MonoBehaviour
     public bool isDropped;
 
     public UnityEvent customEvent;
-    public InventoryItem getCopy()
+    public Item GetCopy()
     {
-        return (InventoryItem)this.MemberwiseClone();
+        return (Item)this.MemberwiseClone();
     }
 }
+
+// списан

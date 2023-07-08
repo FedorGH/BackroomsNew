@@ -28,6 +28,16 @@ public class Drag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
                     dragPrefab.transform.GetChild(0).GetComponent<TMP_Text>().enabled = false;
             }
 
+            if (isDraggingObject.GetComponent<FavoriteItem>())
+            {
+                dragPrefab.GetComponent<Image>().sprite = GetComponent<FavoriteItem>().CurrentFavoriteItem.iconItem;
+
+                if (GetComponent<FavoriteItem>().CurrentFavoriteItem.countItem > 1)
+                    dragPrefab.transform.GetChild(0).GetComponent<TMP_Text>().text = GetComponent<FavoriteItem>().CurrentFavoriteItem.countItem.ToString();
+                else
+                    dragPrefab.transform.GetChild(0).GetComponent<TMP_Text>().enabled = false;
+            }
+
             if (dragPrefab.GetComponent<Image>().sprite != null)
             {
                 dragPrefab.SetActive(true);
@@ -46,6 +56,11 @@ public class Drag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
             if (isDraggingObject.GetComponent<CurrentItem>())
             {
                 dragPrefab.GetComponent<Image>().sprite = GetComponent<CurrentItem>().CurrentInventoryItem.iconItem;
+            }
+
+            if (isDraggingObject.GetComponent<FavoriteItem>())
+            {
+                dragPrefab.GetComponent<Image>().sprite = GetComponent<FavoriteItem>().CurrentFavoriteItem.iconItem;
             }
 
             if (dragPrefab.GetComponent<Image>().sprite != null)
@@ -74,11 +89,11 @@ public class Drag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
         dragPrefab.SetActive(false);
     }
 
-    public InventoryItem dragedItem(InventoryItem item)
+    public Item DraggedItem(Item item)
     {
         for (int i = 0; i < InventoryManager.instanceInventory.dataBase.transform.childCount; i++)
         {
-            InventoryItem temp = InventoryManager.instanceInventory.dataBase.transform.GetChild(i).GetComponent<InventoryItem>();
+            Item temp = InventoryManager.instanceInventory.dataBase.transform.GetChild(i).GetComponent<Item>();
             if (temp.id == item.id)
             {
                 return temp;
@@ -87,8 +102,10 @@ public class Drag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
         return null;
     }
 
-    public void AddItem(InventoryItem item)
+    public void AddItem(Item item)
     {
         item.countItem++;
     }
 }
+
+// списан

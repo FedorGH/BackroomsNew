@@ -57,7 +57,7 @@ public class PlayerCont : MonoBehaviour
         // Проверяем возможность прыжка и обрабатываем его
         if (characterController.isGrounded)
         {
-            if (Input.GetButton("Jump"))
+            if (Input.GetButtonDown("Jump"))
             {
                 AnimPlayer.SetTrigger("jump");
                 verticalVelocity = jumpForce;

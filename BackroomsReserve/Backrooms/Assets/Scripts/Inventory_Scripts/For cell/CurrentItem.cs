@@ -10,7 +10,7 @@ public class CurrentItem : MonoBehaviour, IPointerClickHandler, IDropHandler
 {
     private int itemNum;
 
-    public InventoryItem CurrentInventoryItem
+    public Item CurrentInventoryItem
     {
         get { return InventoryManager.instanceInventory.items[ItemNum]; }
         set { InventoryManager.instanceInventory.items[ItemNum] = value; }
@@ -20,11 +20,6 @@ public class CurrentItem : MonoBehaviour, IPointerClickHandler, IDropHandler
     {
         get { return itemNum; }
         set { itemNum = value; }
-    }
-
-    void Update()
-    {
-
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -64,6 +59,7 @@ public class CurrentItem : MonoBehaviour, IPointerClickHandler, IDropHandler
         }
 
         CurrentItem dragedCurrentItem = dragedObject.GetComponent<CurrentItem>();
+        FavoriteItem dragedFavouriteItem = dragedObject.GetComponent<FavoriteItem>();
 
         Drag drag = Drag.isDraggingObject.GetComponent<Drag>();
 
@@ -82,14 +78,36 @@ public class CurrentItem : MonoBehaviour, IPointerClickHandler, IDropHandler
                 }
                 else
                 {
-                    InventoryItem currentItem = GetComponent<CurrentItem>().CurrentInventoryItem;
+                    Item currentItem = GetComponent<CurrentItem>().CurrentInventoryItem;
                     GetComponent<CurrentItem>().CurrentInventoryItem = dragedCurrentItem.CurrentInventoryItem;
                     dragedCurrentItem.CurrentInventoryItem = currentItem;
                 }
 
             }
 
+            if (dragedObject.GetComponent<FavoriteItem>())
+            {
+                if (dragedFavouriteItem.CurrentFavoriteItem.id == GetComponent<CurrentItem>().CurrentInventoryItem.id)
+                {
+                    if (dragedFavouriteItem.CurrentFavoriteItem.isStackable)
+                    {
+                        int count = dragedFavouriteItem.CurrentFavoriteItem.countItem;
+                        GetComponent<CurrentItem>().CurrentInventoryItem.countItem += count;
+                        dragedFavouriteItem.CurrentFavoriteItem = InventoryManager.instanceInventory.EmptySlot();
+                    }
+                }
+                else
+                {
+                    Item currentItem = GetComponent<CurrentItem>().CurrentInventoryItem;
+                    GetComponent<CurrentItem>().CurrentInventoryItem = dragedFavouriteItem.CurrentFavoriteItem;
+                    dragedFavouriteItem.CurrentFavoriteItem = currentItem;
+                }
+            }
+
             InventoryManager.instanceInventory.DisplayItems();
+
+            if (InventoryManager.instanceInventory.favorite)
+                InventoryManager.instanceInventory.favorite.DisplayItems();
         }
 
         if (eventData.button == PointerEventData.InputButton.Right)
@@ -98,10 +116,20 @@ public class CurrentItem : MonoBehaviour, IPointerClickHandler, IDropHandler
             {
                 if (dragedCurrentItem)
                 {
-                    InventoryItem dragItem = dragedCurrentItem.CurrentInventoryItem.getCopy();
+                    Item dragItem = dragedCurrentItem.CurrentInventoryItem.GetCopy();
                     dragItem.countItem = 1;
                     GetComponent<CurrentItem>().CurrentInventoryItem = dragItem;
                     InventoryManager.instanceInventory.RemoveItem(dragedCurrentItem.ItemNum);
+                    return;
+                }
+
+                if (dragedFavouriteItem)
+                {
+                    Item dragItem = dragedFavouriteItem.CurrentFavoriteItem.GetCopy();
+                    dragItem.countItem = 1;
+                    GetComponent<CurrentItem>().CurrentInventoryItem = dragItem;
+                    InventoryManager.instanceInventory.favorite.RemoveItem(dragedFavouriteItem.ItemNum);
+                    InventoryManager.instanceInventory.DisplayItems();
                     return;
                 }
             }
@@ -118,15 +146,22 @@ public class CurrentItem : MonoBehaviour, IPointerClickHandler, IDropHandler
                     }
                 }
             }
+
+            if (dragedFavouriteItem)
+            {
+                if (GetComponent<CurrentItem>().CurrentInventoryItem.id == dragedFavouriteItem.CurrentFavoriteItem.id)
+                {
+                    if (dragedFavouriteItem.CurrentFavoriteItem.isStackable)
+                    {
+                        drag.AddItem(GetComponent<CurrentItem>().CurrentInventoryItem);
+                        InventoryManager.instanceInventory.favorite.RemoveItem(dragedFavouriteItem.ItemNum);
+                        InventoryManager.instanceInventory.DisplayItems();
+                        return;
+                    }
+                }
+            }
         }
     }
 
 }
-
-
-
-
-
-
-
-
+// списан

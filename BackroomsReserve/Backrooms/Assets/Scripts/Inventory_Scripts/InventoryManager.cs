@@ -9,7 +9,8 @@ public class InventoryManager : MonoBehaviour
 {
     public static InventoryManager instanceInventory;
 
-    [HideInInspector] public List<InventoryItem> items;
+    [HideInInspector] public List<Item> items;
+    public FavoriteManager favorite;
     public GameObject inventoryPanel;
     public GameObject parentCells;
     public GameObject player;
@@ -39,23 +40,24 @@ public class InventoryManager : MonoBehaviour
         RenameCells();
         RenameIcons();
         HidePanel();
+
     }
 
     void InitInventory()
     {
-        items = new List<InventoryItem>();
+        items = new List<Item>();
         for (int i = 0; i < parentCells.transform.childCount; i++)
         {
             items.Add(EmptySlot());
         }
     }
 
-    public InventoryItem EmptySlot()
+    public Item EmptySlot()
     {
-        return gameObject.AddComponent<InventoryItem>();
+        return gameObject.AddComponent<Item>();
     }
 
-    public void AddUnStackableItem(InventoryItem currentItem)
+    public void AddUnStackableItem(Item currentItem)
     {
         for (int i = 0; i < items.Count; i++)
         {
@@ -70,7 +72,7 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    void Massage(InventoryItem currentItem)
+    void Massage(Item currentItem)
     {
         GameObject massObj = Instantiate(massage);
         massObj.transform.SetParent(massageManager.transform);
@@ -87,7 +89,7 @@ public class InventoryManager : MonoBehaviour
         return 0;
     }
 
-    void AddStackableItem(InventoryItem currentItem)
+    void AddStackableItem(Item currentItem)
     {
         for (int i = 0; i < items.Count; i++)
         {
@@ -102,7 +104,7 @@ public class InventoryManager : MonoBehaviour
         AddUnStackableItem(currentItem);
     }
 
-    public void AddItem(InventoryItem currentItem)
+    public void AddItem(Item currentItem)
     {
         if (currentItem.isStackable)
             AddStackableItem(currentItem);
@@ -152,9 +154,9 @@ public class InventoryManager : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, 3f))
             {
-                if (hit.collider.GetComponent<InventoryItem>())
+                if (hit.collider.GetComponent<Item>())
                 {
-                    InventoryItem currentItem = hit.collider.GetComponent<InventoryItem>();
+                    Item currentItem = hit.collider.GetComponent<Item>();
                     Massage(currentItem);
                     AddItem(currentItem);
                     Destroy(currentItem.gameObject);
@@ -195,10 +197,11 @@ public class InventoryManager : MonoBehaviour
 
         for (int i = 0; i < parentCells.transform.childCount; i++)
         {
-            InventoryItem currentItem = items[i];
+            Item currentItem = items[i];
             Transform cell = parentCells.transform.GetChild(i);
 
             Image icon = cell.transform.GetChild(0).GetComponent<Image>();
+
             TMP_Text count = icon.transform.GetChild(0).GetComponent<TMP_Text>();
 
             if (currentItem.id != EmptySlotID())
@@ -246,7 +249,7 @@ public class InventoryManager : MonoBehaviour
     {
         for (int i = 0; i < dataBase.transform.childCount; i++)
         {
-            InventoryItem item = dataBase.transform.GetChild(i).GetComponent<InventoryItem>();
+            Item item = dataBase.transform.GetChild(i).GetComponent<Item>();
             if (item != null)
             {
                 if (item.id == id)
