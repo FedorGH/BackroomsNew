@@ -6,7 +6,7 @@ using Unity.Services.Authentication;
 public class BanList : MonoBehaviour
 {
     public string[] blockedPlayerIDs;
-
+    public GameObject BannedPanel;
     private string playerID;
 
     private void Start()
@@ -21,6 +21,7 @@ public class BanList : MonoBehaviour
         {
             if (blockedID == playerID)
             {
+                BannedPanel.SetActive(true);
                 Debug.Log("»грок заблокирован!");
                 // «десь можно выполнить дополнительные действи€, св€занные с баном игрока
                 return;
